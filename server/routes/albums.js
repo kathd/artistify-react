@@ -57,7 +57,19 @@ router.get("/albums/:id", (req, res, next) => {
 });
 
 router.post("/albums", uploader.single("cover"), (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  const newAlbum = req.body
+  console.log(req.body)
+  albumModel
+  .create(newAlbum)
+  .then(() => {
+    res.status(200).json(newAlbum);
+  })
+  .catch(err => {
+    console.log(err);
+    
+    res.status(500).json(err);
+  })
+  
 });
 
 router.patch("/albums/:id", uploader.single("cover"), (req, res, next) => {
