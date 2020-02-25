@@ -136,7 +136,7 @@ class FormAlbum extends Component {
           <select name="artist" defaultValue="Select Artist">
             <option disabled>Select Artist</option>
             {this.state.artists && this.state.artists.map((artist,i) => (
-              <option selected={artist._id === this.state.artist && 'selected'} key={i} value={artist._id}>
+              <option selected={artist._id === this.state.artist && 'selected'} key={i}>
                 {artist.name}
               </option>
               
@@ -178,7 +178,7 @@ class FormAlbum extends Component {
           <select name="label" defaultValue="Select Label">
           <option disabled>Select Label</option>
             {this.state.labels && this.state.labels.map((label,i) => (
-              <option selected={label._id === this.state.label && 'selected'} key={i} value={label._id}>
+              <option selected={label._id === this.state.label && 'selected'} key={i}>
                 {label.name}
               </option>
             ))}
