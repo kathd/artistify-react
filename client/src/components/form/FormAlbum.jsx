@@ -98,7 +98,6 @@ class FormAlbum extends Component {
   };
 
   render() {
-    console.log(this.state, "this is state");
     return (
       <>
         <h1 className="title diy">D.I.Y (FormAlbum)</h1>
