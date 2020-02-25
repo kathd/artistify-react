@@ -7,39 +7,61 @@ import APIHandler from "./../../api/APIHandler";
 // styles
 import "./../../styles/form.css";
 // const apiHandler  = new ApiHandler();
+
 class FormArtist extends Component {
   state = {
+    _id: "",
     name: "",
     // styles n'est pas envoyé dans le backend
-    styles: [],
+    styles: [], 
     style: "",
     description: "",
     isBand: false
   };
+
   componentDidMount() {
+    if (this.props._id ) {
+      APIHandler.get(`/artists/${this.props._id}`)
+        .then(apiRes => {
+          this.setState(apiRes.data);
+          console.log("this is the edit result", apiRes.data);
+        })
+        .catch(apiErr => console.error(apiErr));
+      }
+    
     APIHandler.get("/styles")
       .then(apiRes => {
+        console.log("coucou")
         this.setState({ styles: apiRes.data.styles });
         console.log("this result", apiRes);
       })
       .catch(apiErr => console.error(apiErr));
   }
+
+
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value }, console.log(this.state));
   };
+
+
   handleSubmit = e => {
-    // const fd = new FormData();
-    // fd.append("name", this.state.name);
-    // fd.append("style", this.state.style);
-    // fd.append("description", this.state.description);
-    // fd.append("isBand", this.state.isBand);
     e.preventDefault();
+    if (this.props._id) {
+      APIHandler.patch(`/artists/${this.props._id}`, this.state)
+      .then(apiRes => {
+        console.log("artist was inserted", apiRes);
+      })
+      .catch(apiErr => console.error(apiErr));
+  }
+    else {
     APIHandler.post("/artists", this.state)
       .then(apiRes => {
         console.log("artist was inserted", apiRes);
       })
       .catch(apiErr => console.error(apiErr));
+    }
   };
+
   render() {
     console.log(this.state);
     return (
@@ -59,6 +81,7 @@ class FormArtist extends Component {
             onChange={this.handleChange}
             value={this.state.name}
           />
+
           <label className="label" htmlFor="description">
             Description
           </label>
@@ -70,6 +93,7 @@ class FormArtist extends Component {
             onChange={this.handleChange}
             defaultValue={this.description}
           />
+
           <label className="label" htmlFor="style">
             Style
           </label>
@@ -90,9 +114,10 @@ class FormArtist extends Component {
           {/* <option value="Techno" type="text">Techno</option>
           <option value="Techno" type="text">Electro</option>
           <option value="Techno" type="text">Jazz</option> */}
+
           <p>Is Band?</p>
           <div>
-            <label className="label" htmlFor="isband">
+            <label className="label" htmlFor="isBand" name="isBand">
               yes
             </label>
             <input
@@ -103,7 +128,8 @@ class FormArtist extends Component {
               id="isBand"
               type="radio"
             />
-            <label className="label" htmlFor="isband">
+
+            <label className="label" htmlFor="isBand" name="isBand">
               no
             </label>
             <input
@@ -116,6 +142,7 @@ class FormArtist extends Component {
               checked
             />
           </div>
+
           <button type="submit" className="btn">
             ok
           </button>
