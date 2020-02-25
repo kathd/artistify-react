@@ -6,9 +6,16 @@ import IconFav from "../icon/IconFavorite";
 import "./../../styles/icon-color.css";
 
 export default function CardAlbum({ data }) {
-  return <div>
-      <div className="title">{data.title}</div>
-      <img className="cover" src={data.cover} alt={data.title} />
-      <IconFav className="icon-color"/>
-    </div>;
+  return (
+    <Link to={`/albums/${data._id}`}>
+    <div>
+      {/* {data && data => ( */}
+        <div className="title">{data.title}</div>
+        <img className="cover" src={data.cover} alt={data.title} />
+        <IconFav className="icon-color"/>
+      {/* )} */}
+    </div>
+   </Link>
+  )
+    
 }
