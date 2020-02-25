@@ -52,14 +52,7 @@ class FormAlbum extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const album = this.state.album
-    // const fd = new FormData();
-    // fd.append("title", this.state.title)
-    // fd.append("releaseDate", this.state.releaseDate)
-    // fd.append("artist", this.state.artist)
-    // fd.append("cover", this.state.cover)
-    // fd.append("description", this.state.description)
-    // fd.append("label", this.state.label)
-    // console.log(album)
+
     APIHandler
     .post("/albums", album)
     .then(apiRes => {
