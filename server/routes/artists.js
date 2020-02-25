@@ -29,13 +29,14 @@ router.get("/artists", async (req, res, next) => {
     .then(async artists => {
       const artistsWithRatesAVG = await Promise.all(
         artists.map(async res => {
-          // AVG : things are getting tricky here ! :) 
+          // AVG : things are getting tricky here ! :)
           // the following map is async, updating each artist with an avg rate
           const copy = res.toJSON(); // copy the artist object (mongoose response are immutable)
           // copy.avg = await getAverageRate(res._id); // get the average rates fr this artist
 
           copy.isFavorite =
-            req.user && req.user.favorites.artists.includes(copy._id.toString());
+            req.user &&
+            req.user.favorites.artists.includes(copy._id.toString());
           return copy; // return to the mapped result array
         })
       );
@@ -45,25 +46,34 @@ router.get("/artists", async (req, res, next) => {
     .catch(next);
 });
 
-
 router.get("/artists/:id", (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  res.status(200).json({ msg: "@todo" });
 });
 
 router.get("/filtered-artists", (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  res.status(200).json({ msg: "@todo" });
 });
 
 router.post("/artists", (req, res) => {
-  res.status(200).json({ msg: "@todo" })
+  const newArtist = req.body;
+  console.log(req.body);
+  artistModel
+    .create(newArtist)
+    .then(() => {
+      res.status(200).json(newArtist);
+      console.log("artist was created", newArtist);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
 });
 
 router.patch("/artists/:id", async (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  res.status(200).json({ msg: "@todo" });
 });
 
 router.delete("/artists/:id", (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  res.status(200).json({ msg: "@todo" });
 });
 
 module.exports = router;
