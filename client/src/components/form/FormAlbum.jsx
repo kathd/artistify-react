@@ -15,6 +15,19 @@ class FormAlbum extends Component {
   }
 
   componentDidMount() {
+
+    // to get info from album
+    if (this.props._id) {
+      APIHandler
+      .get(`/albums/${this.props._id}`)
+      .then(resAlbum => {
+        console.log(resAlbum.data)
+        this.setState({...resAlbum.data,})
+      })
+      .catch(err => console.error(err))
+    }
+
+    // to get info from artists and labels
     APIHandler
     .get("/artists")
     .then(resArtists => {
@@ -29,6 +42,7 @@ class FormAlbum extends Component {
       .catch(err => console.error(err))
     })
     .catch(err => console.error(err))
+  
   }
 
   handleChange = e => {
@@ -52,14 +66,27 @@ class FormAlbum extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const album = this.state.album
+    
+    if (this.props._id) {
+      APIHandler
+      .patch(`/albums/${this.props._id}`, album)
+      .then(apiRes => {
+        console.log(apiRes);
+        this.props.history.push(`/albums/${album._id}`)
+      })
+      .catch(err => console.error(err))
+    }
+    else {
 
-    APIHandler
-    .post("/albums", album)
-    .then(apiRes => {
-      console.log(apiRes);
-      this.props.history.push("/albums/create")
-    })
-    .catch(err => console.error(err))
+      APIHandler
+      .post("/albums", album)
+      .then(apiRes => {
+        console.log(apiRes);
+        this.props.history.push("/albums")
+      })
+      .catch(err => console.error(err))
+    
+    }
 
   };
 
@@ -85,7 +112,7 @@ class FormAlbum extends Component {
             id="title"
             type="text"
             name="title"
-            // defaultValue={this.state.title}
+            defaultValue={this.state.title}
           />
 
           <label
@@ -98,7 +125,7 @@ class FormAlbum extends Component {
             id="releaseDate"
             name="releaseDate"
             type="date"
-            // defaultValue={this.state.releaseDate}
+            defaultValue={(this.state.releaseDate && this.state.releaseDate.substr(0,10))}
           />
 
           <label
@@ -109,9 +136,10 @@ class FormAlbum extends Component {
           <select name="artist" defaultValue="Select Artist">
             <option disabled>Select Artist</option>
             {this.state.artists && this.state.artists.map((artist,i) => (
-              <option key={i} value={artist._id}>
+              <option selected={artist._id === this.state.artist && 'selected'} key={i} value={artist._id}>
                 {artist.name}
               </option>
+              
             ))}
           </select>
 
@@ -126,7 +154,7 @@ class FormAlbum extends Component {
             name="cover"
             type="file"
             onChange={this.handleFileUpload}
-            // defaultValue={this.state.cover}
+            defaultValue={this.state.cover}
           />
 
           <label
@@ -139,7 +167,7 @@ class FormAlbum extends Component {
             id="description"
             type="text"
             name="description"
-            // defaultValue={this.state.description}
+            defaultValue={this.state.description}
           />
 
           <label
@@ -150,7 +178,7 @@ class FormAlbum extends Component {
           <select name="label" defaultValue="Select Label">
           <option disabled>Select Label</option>
             {this.state.labels && this.state.labels.map((label,i) => (
-              <option key={i} value={label._id}>
+              <option selected={label._id === this.state.label && 'selected'} key={i} value={label._id}>
                 {label.name}
               </option>
             ))}

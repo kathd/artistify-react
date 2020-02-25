@@ -53,7 +53,10 @@ router.get("/albums", (req, res, next) => {
 });
 
 router.get("/albums/:id", (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  albumModel.findById(req.params.id)
+  .then(({ title, releaseDate, artist, cover, description, label }) => {
+    res.status(200).json({ title, releaseDate, artist, cover, description, label })
+  })
 });
 
 router.post("/albums", uploader.single("cover"), (req, res, next) => {
@@ -69,11 +72,18 @@ router.post("/albums", uploader.single("cover"), (req, res, next) => {
     
     res.status(500).json(err);
   })
-  
 });
 
 router.patch("/albums/:id", uploader.single("cover"), (req, res, next) => {
-  res.status(200).json({ msg: "@todo" })
+  albumModel
+  .findByIdAndUpdate(req.params.id, req.body, { new:true })
+  .then( album => {
+    console.log(album)
+    res.status(200).json(album)
+  })
+  .catch(err => {
+    res.status(500).json(err);
+  });
 });
 
 router.delete("/albums/:id", (req, res, next) => {
