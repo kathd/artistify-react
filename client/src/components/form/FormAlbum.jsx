@@ -35,7 +35,7 @@ class FormAlbum extends Component {
     this.setState({ album: { ...this.state.album, [e.target.name]: e.target.value} })
   };
 
-  handleFiledUpload = e => {
+  handleFileUpload = e => {
     const uploadData = new FormData();
     uploadData.append("cover", e.target.files[0]);
     
