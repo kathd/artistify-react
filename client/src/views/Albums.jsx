@@ -12,11 +12,14 @@ export default function Albums() {
   const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    apiHandler.get("/albums").then(apiRes => {
+    apiHandler
+    .get("/albums")
+    .then(apiRes => {
+      console.log(apiRes)
       setAlbums(apiRes.data.albums);
-    });
-
-    return () => {};
+    })
+    .catch(err => console.error(err))
+    // return () => {};
   }, []);
 
   return (
@@ -33,6 +36,9 @@ export default function Albums() {
         <br />
         If the albums list is empty, provide a default view.
       </p>
+
+
+
       <h1 className="title diy">D.I.Y</h1>
       <p>
         Import a custom {`<IconFavorite />`} on each album card.
