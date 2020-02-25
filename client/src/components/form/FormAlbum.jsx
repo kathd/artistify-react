@@ -35,6 +35,20 @@ class FormAlbum extends Component {
     this.setState({ album: { ...this.state.album, [e.target.name]: e.target.value} })
   };
 
+  handleFiledUpload = e => {
+    const uploadData = new FormData();
+    uploadData.append("cover", e.target.files[0]);
+    
+    APIHandler.handleUpload(uploadData)
+    .then(res => {
+      console.log("response is", res)
+      this.setState({cover: res.secure_url})
+    })
+    .catch(err => {
+      console.log("Error while uploading the file:", err)
+    })
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     const album = this.state.album
@@ -108,7 +122,7 @@ class FormAlbum extends Component {
             ))}
           </select>
 
-          {/* <label
+          <label
             className="label"
             htmlFor="cover">
             cover
@@ -117,9 +131,10 @@ class FormAlbum extends Component {
             className="input"
             id="cover"
             name="cover"
-            type="text"
+            type="file"
+            onChange={this.handleFileUpload}
             // defaultValue={this.state.cover}
-          /> */}
+          />
 
           <label
             className="label"
